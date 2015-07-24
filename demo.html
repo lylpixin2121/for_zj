@@ -1,0 +1,320 @@
+
+<!doctype html>
+<html>
+<head>
+<title>html5 demo</title>
+<meta charset="utf-8">
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="pengshao_gz">
+<meta name="format-detection" content="telephone=no" />
+<script type="text/javascript">
+// 此处添加如下js 可以避免二倍图和百分比定位造成的不便
+if(/Android (\d+\.\d+)/.test(navigator.userAgent)){
+    var version = parseFloat(RegExp.$1);
+    if(version>2.3){
+        var phoneScale = parseInt(window.screen.width)/640;
+        document.write('<meta name="viewport" content="width=640, minimum-scale = '+ phoneScale +', maximum-scale = '+ phoneScale +', target-densitydpi=device-dpi">');
+    }else{
+        document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+    }
+}else{
+    document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+}
+</script>
+<style type="text/css">
+/*此处是css reset初始化的地方 根据需要合并到你所需要专题的css中*/
+body,dl,dd,ul,ol,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,p,hr,thead,tbody,tfoot,th,td{margin:0;padding:0;}
+ul,ol{list-style:none;}
+a{text-decoration:none;color:#333333;}
+a:hover{color:#333333;}
+a:visited{color:#333333;}
+html{-ms-text-size-adjust:none;-webkit-text-size-adjust:none;text-size-adjust:none;font-size:62.5%;}
+body{font-size:14px;line-height:1.5em;color:#333333;}
+html,body {height:100%;}
+body,button,input,select,textarea{font-family:'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;}
+b,strong{font-weight:bold;}
+i,em{font-style:normal;}
+table{border-collapse:collapse;border-spacing:0;}
+table th,table td{border:1px solid #ddd;padding:5px;}
+table th{font-weight:inherit;border-bottom-width:2px;border-bottom-color:#ccc;}
+img{border:0 none;width:auto\9;max-width:100%;vertical-align:top;}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0;vertical-align:baseline;}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;}
+button[disabled],input[disabled]{cursor:default;}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0;}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	input{line-height:normal!important;}
+}
+select[size],select[multiple],select[size][multiple]{border:1px solid #AAA;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block;}
+audio,canvas,video,progress{display:inline-block;}
+.g-doc{overflow: hidden;margin: 0 auto;}
+@media only screen and (min-width: 1025px){.g-doc{max-width:320px;}}
+@font-face {font-family:"didotItalic";src: url('DidotItalic.ttf');}
+</style>
+<style type="text/css">
+/*此处是插件必须的css*/
+.g-doc,#wrap{height: 100%;}
+.item{width: 100%;height: 100%;position: absolute;left: 0;top: 0;overflow: hidden;-webkit-transition: -webkit-transform .3s ease-out;}
+
+/*音乐播放控件*/
+.audio{position:fixed;z-index:10}
+#music-btn{padding:10px;position:fixed;top:3%;right:3%;z-index:10}
+#music-btn i{display:block;width:48px;height:48px;background:url(images/song.png) no-repeat;}
+#music-btn p{opacity:0;position:absolute;top:0;left:-20px;color:#fff;line-height:50px;-webkit-transform:translateX(-10px);transform:translateX(-10px);-webkit-transition:all .4s linear;transition:all .4s linear;font-size:12px}
+.audio .play i{-webkit-animation:rotate 1.2s linear 0s infinite;animation:rotate 1.2s linear 0s infinite}
+#music-btn .show{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}
+
+@-webkit-keyframes rotate{
+	0%{-webkit-transform:rotateZ(0deg)}
+	100%{-webkit-transform:rotateZ(360deg)}
+}
+@keyframes rotate{
+	0%{transform:rotateZ(0deg)}
+100%{transform:rotateZ(360deg)}
+}
+/*下一屏指针*/
+.emDown{width:76px;height:38px;background:#f00;position:absolute;left:282px;bottom:20px;opacity:1;-webkit-animation:updown 1s infinite;animation:updown 1s infinite;}
+@-webkit-keyframes updown{
+	0%{ transform:translate(0, 7px);-webkit-transform:translate(0, 7px);}
+	50%{ transform:translate(0, 0);-webkit-transform:translate(0, 0);}
+	100%{ transform:translate(0, 7px);-webkit-transform:translate(0, 7px);}
+}
+@keyframes updown{
+	0%{ transform:translate(0, 5px);-webkit-transform:translate(0, 5px);}
+	50%{ transform:translate(0, 0);-webkit-transform:translate(0, 0);}
+	100%{ transform:translate(0, 5px);-webkit-transform:translate(0, 5px);}
+}
+
+/*此处是根据需要适当删除*/
+.item{font-size:30px;text-align: center;line-height:200px;}
+.item0{background:#fff;}
+.item1{background:#ccc;}
+.item2{background:#52c0ff;position: relative;}
+.item3{background:#756;}
+.hide{display: none;position: absolute;width:300px;height: 300px;left: 50%;top: 50%;margin:-150px 0 0 -150px;line-height: 40px; padding:15px 0;background-color: #fff;}
+
+/*加载动画样式*/
+#loading {opacity: 1;position:absolute;width:200px;height:10px;background:#f5ce13;margin:-10px 0 0 -100px;top:50%;left:50%;border-radius:5px;-webkit-transition:opacity 0.5s;}
+#loading .d1 {height:10px;background:#5cb531;width:0;-webkit-transition:width 1s;border-radius:5px;}
+</style>
+</head>
+
+<body>
+<!-- 计数器 -->
+<script>
+document.body.insertBefore(document.createElement("script"), document.body.firstChild).src = "http://count.pclady.com.cn/count.php?channel=6015&screen=" + screen.width + "*" + screen.height + "&refer=" + encodeURIComponent(document.referrer) + "&anticache=" + new Date().getTime() + "&url=" + encodeURIComponent(location.href) + "&from=cms";
+</script>
+<!-- 内容层 -->
+<div class="g-doc">
+	<div id="wrap"></div>
+	<div id="loading">
+		<div class="d1"></div>
+		<div style="color:#f00;">100%</div>
+	</div>
+	<!-- 音乐播放控件 --
+	<div class="audio">
+		<audio loop id="audio">
+			<source src="900.mp3" type="audio/mp3">
+		</audio>
+		<div id="music-btn" ontouchend="playPause()" class="play"><i></i><p class="">开启</p></div>
+	</div>
+	<!-- /音乐播放控件 -->
+</div>
+<script type="text/template" id="J-temp">
+<!-- 首屏 -->
+<div class="item item0">
+	<div class="item-inner">
+		首屏默认锁住向上滚动
+		
+		<em class="emDown"></em>
+	</div>
+</div>
+<!-- /首屏 -->
+
+<!-- 第1屏 -->
+<div class="item item1">
+	<div class="item-inner">
+		第二屏默认锁住上下滚动<br>
+		<span>点击解锁上下滚动</span>
+		<em class="emDown"></em>
+	</div>
+</div>
+<!-- /第1屏 -->
+
+<!-- 第2屏 -->
+<div class="item item2">
+	<div class="item-inner">
+		<span class="clink">点击锁住上下滚动</span>
+		<div class="hide">
+			我是弹窗，点我关闭并解锁上下滚动
+		</div>
+		<em class="emDown"></em>
+	</div>
+</div>
+<!-- /第2屏 -->
+
+<!-- 第3屏 -->
+<div class="item item3">
+	<div class="item-inner">
+		末屏默认锁住向下滚动<br><br>
+		<span style="color: #fff;">特别鸣谢：PCLADY 龙哥</span><br>
+		<a href="slide.html" target="_blank" style="color:#C09; line-height:50px;">更多说明请猛戳</a>
+	</div>
+</div>
+<!-- /第3屏 -->
+</script>
+<script src="http://js.3conline.com/wap/2013/common/js/zepto.min.js"></script>
+<script src="for_zj.js"></script>
+<script>
+/*获取页码 上线最好删掉*/
+var urlGo=window.location.search;
+var urlSplit=urlGo.split("=")[1]*1;
+if(!urlSplit){
+	urlSplit=0;
+}else{
+	urlSplit=urlSplit;
+};
+
+//此处放入第一、第二屏图片及用到的背景图片
+var picOne = [
+		"images/bfb.png",
+		"images/bk.png",
+		"images/bk-max.png",
+		"images/bk-ma.png",
+		"images/bl.png"
+	]
+	//第二屏之后的需要加载的大图
+	picTwo= [
+		"images/logo.png",
+		"images/model.png",
+		"images/niao.png",
+		"images/scroll-down.png",
+		"images/tit.png"
+	];
+var flg=true;
+//主题代码 将在首屏加载之后开始执行
+function info(){
+	document.querySelector("#wrap").innerHTML = document.querySelector("#J-temp").innerHTML;
+	var mySlide = new touchSlider({
+		slideCallback: function(index) {
+			console.log(index);
+			var _this=this;
+			if(index==0){
+				//锁定向上滚动
+				_this._lockToPrev = true;
+			}
+			
+			if(index==1){
+				if(flg){
+					flg=false;
+					//锁定上下滚动
+					mySlide._lockToSlide = true;
+				}else{
+					$('.item1 span').text('已经走过一遍了，不会锁住了—_—');
+				}
+				$('.item1 span').click(function(){
+					$(this).text('上下滚动已解锁');
+					_this._lockToSlide= false;
+				});
+			}
+			
+			if(index==2){
+				$('.clink').click(function(){
+					$('.hide').show();
+					_this._lockToSlide= true;
+				});
+				$('.hide').click(function(){
+					$(this).hide();
+					_this._lockToSlide= false;
+				});
+			}
+			
+			if(index==3){
+				//锁定向下滚动
+				_this._lockToNext = true;
+			}
+		}
+	});
+	window.mySlide = mySlide;
+	//跳转到对应屏
+	mySlide.playTo(urlSplit);
+}
+
+var eventType = document.addEventListener ? 'DOMContentLoaded' : 'readystatechange';
+addEvent(document, eventType, function() {
+	if (document.addEventListener) {
+		loading(picOne);
+	} else {
+		if (document.readyState == "complete") {
+			loading(picOne);
+		}
+	}
+})
+
+function addEvent(node, type, fn) {
+	if (document.addEventListener) {
+		node.addEventListener("DOMContentLoaded", fn, false);
+	} else {
+		node.attachEvent("on" + type, fn);
+	}
+}
+
+function loading(picUrl) {
+	var imgurls=picUrl;
+	var imgs = [],
+		loaded = 0;
+	for (var i = 0; i < imgurls.length; i++) {
+		imgs[i] = new Image();
+
+		imgs[i].onload = imgs[i].onerror = imgs[i].onabort = function(e) {
+			loaded++;
+			checkloaded()
+		}
+		imgs[i].src = imgurls[i];
+	}
+
+	function checkloaded() {
+		document.getElementById("loading").getElementsByTagName("div")[0].style.width = (loaded / imgurls.length) * 200 + "px";
+		document.getElementById("loading").getElementsByTagName("div")[1].innerHTML = Math.round(loaded / imgurls.length * 100) + "%";
+		if (loaded == imgurls.length) {
+			//首屏加载完成
+			$('#loading').hide();
+			preloading(picTwo);
+			info();
+		}
+	}
+}
+
+function preloading(picUrl){
+	var imgurls =picUrl;
+	var imgs = [];
+	var loaded = 0;
+	for (var i = 0; i < imgurls.length; i++) {
+		imgs[i] = new Image();
+		imgs[i].src = imgurls[i]
+	}
+}
+</script>
+<script src="http://js.3conline.com/wap/common/wxApi.min.js"></script>
+<script type="text/javascript">
+// 微信分享
+wxApi.init(function() {
+	// 0 自定义分享内容
+	var shareData = {
+		title: 'PCLADY母亲节策划| 我是你的时光机',
+		desc: '如果真的有一家青春照相馆，我希望可以让妈妈重返20岁！……',
+		link: window.location.href,
+		imgUrl: 'http://www1.pclady.com.cn/zt/g20150506/mothersDay/images/cover.jpg'
+	};
+	wx.onMenuShareAppMessage(shareData); // 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+	wx.onMenuShareTimeline(shareData); // 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+	wx.onMenuShareQQ(shareData); // 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+	wx.onMenuShareWeibo(shareData); // 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
+});
+</script>
+</body>
+</html>
